@@ -2,6 +2,8 @@
 
 namespace ListSorter;
 
+use Illuminate\Http\Request;
+
 class ListSorter
 {
     private $request;
@@ -11,7 +13,7 @@ class ListSorter
     private $defaultSortBy;
     private $defaultSortDir;
 
-    public function __construct($request, array $listSortableItems)
+    public function __construct(Request $request, array $listSortableItems)
     {
         $this->setRequest($request);
         $this->setSortableItems($listSortableItems);

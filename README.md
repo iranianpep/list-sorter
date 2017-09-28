@@ -1,5 +1,5 @@
 # List Sorter
-A packagist ready package to start a new PHP 7 project including Composer, PHPUnit, Travis, CodeClimate and StyleCI.
+Lists Sorting Handler in Laravel
 
 [![Latest Stable Version](https://poser.pugx.org/list-sorter/list-sorter/v/stable)](https://packagist.org/packages/list-sorter/list-sorter)
 [![Build Status](https://travis-ci.org/iranianpep/list-sorter.svg?branch=master)](https://travis-ci.org/iranianpep/list-sorter)

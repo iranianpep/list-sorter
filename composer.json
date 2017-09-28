@@ -1,6 +1,6 @@
 {
   "name": "list-sorter/list-sorter",
-  "description": "Sorting functionality for Laravel",
+  "description": "Lists Sorting Handler in Laravel",
   "homepage": "https://github.com/iranianpep/list-sorter",
   "license": "MIT",
   "authors": [
@@ -11,14 +11,15 @@
     "codeclimate/php-test-reporter": "^0.4.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "6.1.*"
+    "phpunit/phpunit": "6.1.*",
+    "illuminate/http": "^5.5"
   },
   "autoload": {
     "psr-4": {
-      "ListOrder\\": ["src/ListOrder"]
+      "ListSorter\\": ["src/ListSorter"]
     }
   },
   "autoload-dev": {
-    "psr-4": {"ListOrder\\": "tests/ListOrder"}
+    "psr-4": {"ListSorter\\": "tests/ListSorter"}
   }
 }
