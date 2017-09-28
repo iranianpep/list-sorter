@@ -116,6 +116,7 @@ class ListSorter
     public function getSortDir()
     {
         $sortDir = $this->getRequest()->input($this->getSortDirKey());
+
         return in_array($sortDir, ['asc', 'desc']) ? $sortDir : $this->getDefaultSortDir();
     }
 
@@ -127,6 +128,7 @@ class ListSorter
     public function getSortBy()
     {
         $sortBy = $this->getRequest()->input($this->getSortByKey());
+
         return in_array($sortBy, array_keys($this->getSortableItems())) ? $sortBy : $this->getDefaultSortBy();
     }
 }
