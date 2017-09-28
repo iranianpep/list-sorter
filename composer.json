@@ -1,7 +1,7 @@
 {
-  "name": "php-base-project/php-base-project",
-  "description": "A packagist ready package to start a new PHP 7 project including Composer, PHPUnit, Travis, CodeClimate and StyleCI.",
-  "homepage": "https://github.com/iranianpep/php-base-project",
+  "name": "list-sorter/list-sorter",
+  "description": "Sorting functionality for Laravel",
+  "homepage": "https://github.com/iranianpep/list-sorter",
   "license": "MIT",
   "authors": [
     { "name": "Ehsan Abbasi", "email": "ehsan.abb@gmail.com" }
@@ -15,10 +15,10 @@
   },
   "autoload": {
     "psr-4": {
-      "PhpBaseProject\\": ["src/PhpBaseProject"]
+      "ListOrder\\": ["src/ListOrder"]
     }
   },
   "autoload-dev": {
-    "psr-4": {"PhpBaseProject\\": "tests/PhpBaseProject"}
+    "psr-4": {"ListOrder\\": "tests/ListOrder"}
   }
 }
