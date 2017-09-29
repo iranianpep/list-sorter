@@ -70,6 +70,23 @@ class ListSorter
             throw new \Exception('Sortable items must not be empty');
         }
 
+        if ($this->areAliasesUnique($this->extractAliases($sortableItems)) !== true) {
+            throw new \Exception('Sortable item alias must be unique');
+        }
+
+        return true;
+    }
+
+    /**
+     * Extract aliases out of sortable items
+     *
+     * @param array $sortableItems
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function extractAliases(array $sortableItems)
+    {
         $aliases = [];
         foreach ($sortableItems as $sortableItem) {
             if (!$sortableItem instanceof SortableItem) {
@@ -79,12 +96,23 @@ class ListSorter
             $aliases[] = $sortableItem->getAlias();
         }
 
-        // check aliases are unique
-        if (count($aliases) !== count(array_unique($aliases))) {
-            throw new \Exception('Sortable item alias must be unique');
+        return $aliases;
+    }
+
+    /**
+     * Check to see whether aliases are unique or not
+     *
+     * @param array $aliases
+     *
+     * @return bool
+     */
+    private function areAliasesUnique(array $aliases)
+    {
+        if (count($aliases) === count(array_unique($aliases))) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
