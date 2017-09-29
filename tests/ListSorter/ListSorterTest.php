@@ -10,7 +10,7 @@ class ListSorterTest extends TestCase
     private function getSortableItems()
     {
         return  [
-            'created_at' => new SortableItem('created_at')
+            'created_at' => new SortableItem('created_at'),
         ];
     }
 
