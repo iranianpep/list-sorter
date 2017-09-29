@@ -207,7 +207,7 @@ class ListSorter
     }
 
     /**
-     * Check to see whether the requested sortBy is a sortable item
+     * Check to see whether the requested sortBy is a sortable item.
      *
      * @param $sortBy
      *
