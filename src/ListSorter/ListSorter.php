@@ -33,7 +33,7 @@ class ListSorter
     /**
      * @param Request $request
      */
-    public function setRequest($request)
+    public function setRequest(Request $request)
     {
         $this->request = $request;
     }
