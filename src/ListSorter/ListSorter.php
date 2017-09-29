@@ -78,12 +78,13 @@ class ListSorter
     }
 
     /**
-     * Extract aliases out of sortable items
+     * Extract aliases out of sortable items.
      *
      * @param array $sortableItems
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     private function extractAliases(array $sortableItems)
     {
@@ -100,7 +101,7 @@ class ListSorter
     }
 
     /**
-     * Check to see whether aliases are unique or not
+     * Check to see whether aliases are unique or not.
      *
      * @param array $aliases
      *
