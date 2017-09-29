@@ -6,12 +6,14 @@ class SortableItem
 {
     private $model;
     private $alias;
-    private $title;
     private $column;
+    private $title;
 
-    public function __construct($alias)
+    public function __construct($alias, $column = '', $title = '')
     {
         $this->setAlias($alias);
+        $this->setColumn($column);
+        $this->setTitle($title);
     }
 
     /**
@@ -39,31 +41,17 @@ class SortableItem
     }
 
     /**
-     * @param string $alias
+     * @param $alias
+     *
+     * @throws \Exception
      */
     public function setAlias($alias)
     {
-        $this->alias = $alias;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        if (!isset($this->title)) {
-            return $this->getAlias();
+        if (empty($alias)) {
+            throw new \Exception('Sortable item alias cannot be empty');
         }
 
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+        $this->alias = $alias;
     }
 
     /**
@@ -71,8 +59,9 @@ class SortableItem
      */
     public function getColumn()
     {
-        if (!isset($this->column)) {
-            return $this->getAlias();
+        if (empty($this->column)) {
+            // fall back option: replace the spaces with under line
+            return strtolower(str_replace(' ', '_', $this->getAlias()));
         }
 
         return $this->column;
@@ -84,5 +73,26 @@ class SortableItem
     public function setColumn($column)
     {
         $this->column = $column;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        if (empty($this->title)) {
+            // fall back option: replace under line with space
+            return ucwords(str_replace('_', ' ', $this->getColumn()));
+        }
+
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

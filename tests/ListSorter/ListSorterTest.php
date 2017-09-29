@@ -10,7 +10,16 @@ class ListSorterTest extends TestCase
     private function getSortableItems()
     {
         return  [
-            'created_at' => new SortableItem('created_at'),
+            new SortableItem('created_at'),
+        ];
+    }
+
+    private function getDuplicatedSortableItems()
+    {
+        return  [
+            new SortableItem('title'),
+            new SortableItem('title'),
+            new SortableItem('created_at'),
         ];
     }
 
@@ -27,6 +36,22 @@ class ListSorterTest extends TestCase
 
         $this->assertEquals($request, $listSorter->getRequest());
         $this->assertEquals($this->getSortableItems(), $listSorter->getSortableItems());
+    }
+
+    public function testConstructWithException()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Sortable item alias must be unique');
+
+        new ListSorter(new Request(), $this->getDuplicatedSortableItems());
+    }
+
+    public function testConstructWithEmptyItemes()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Sortable items must not be empty');
+
+        new ListSorter(new Request(), []);
     }
 
     public function testGetSortByKey()

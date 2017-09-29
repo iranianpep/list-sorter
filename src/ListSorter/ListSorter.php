@@ -10,16 +10,16 @@ class ListSorter
     const DEFAULT_SORT_DIR_KEY = 'dir';
 
     private $request;
-    private $listSortableItems;
+    private $sortableItems;
     private $sortByKey;
     private $sortDirKey;
     private $defaultSortBy;
     private $defaultSortDir;
 
-    public function __construct(Request $request, array $listSortableItems)
+    public function __construct(Request $request, array $sortableItems)
     {
         $this->setRequest($request);
-        $this->setSortableItems($listSortableItems);
+        $this->setSortableItems($sortableItems);
     }
 
     /**
@@ -43,15 +43,47 @@ class ListSorter
      */
     public function getSortableItems()
     {
-        return $this->listSortableItems;
+        return $this->sortableItems;
     }
 
     /**
-     * @param array $listSortableItems
+     * @param array $sortableItems
      */
-    public function setSortableItems(array $listSortableItems)
+    public function setSortableItems(array $sortableItems)
     {
-        $this->listSortableItems = $listSortableItems;
+        // validate aliases
+        if ($this->validateSortableItems($sortableItems) === true) {
+            $this->sortableItems = $sortableItems;
+        }
+    }
+
+    /**
+     * @param array $sortableItems
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function validateSortableItems(array $sortableItems)
+    {
+        if (empty($sortableItems)) {
+            throw new \Exception('Sortable items must not be empty');
+        }
+
+        $aliases = [];
+        foreach ($sortableItems as $sortableItem) {
+            if (!$sortableItem instanceof SortableItem) {
+                throw new \Exception('Invalid sortable item');
+            }
+
+            $aliases[] = $sortableItem->getAlias();
+        }
+
+        // check aliases are unique
+        if (count($aliases) !== count(array_unique($aliases))) {
+            throw new \Exception('Sortable item alias must be unique');
+        }
+
+        return true;
     }
 
     /**
@@ -126,6 +158,9 @@ class ListSorter
         $this->defaultSortDir = $defaultSortDir;
     }
 
+    /**
+     * @return string
+     */
     public function getSortDir()
     {
         $sortDir = $this->getRequest()->input($this->getSortDirKey());
@@ -133,11 +168,17 @@ class ListSorter
         return in_array($sortDir, ['asc', 'desc']) ? $sortDir : $this->getDefaultSortDir();
     }
 
+    /**
+     * @return string
+     */
     public function getNewSortDir()
     {
         return $this->getSortDir() === 'asc' ? 'desc' : 'asc';
     }
 
+    /**
+     * @return string
+     */
     public function getSortBy()
     {
         $sortBy = $this->getRequest()->input($this->getSortByKey());
