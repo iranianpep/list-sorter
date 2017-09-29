@@ -16,18 +16,41 @@ List Sorting Handler in Laravel
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iranianpep/list-sorter/master/LICENSE)
 
 ## Usage
+In the controller:
 ```
 $listSorter = new ListSorter($request, [
-    new SortableItem('title'),
+    new SortableItem('name'),
     new SortableItem('created_at'),
 ]);
 
 $listSorter->setDefaultSortBy('created_at');
 $listSorter->setDefaultSortDir('desc');
 
-// sort by e.g. title or created_at
+// sort by e.g. name or created_at
 $sortBy = $listSorter->getSortBy();
 
 // sort direction e.g. asc or desc
 $sortDir = $listSorter->getSortDir();
+
+$items = User::orderBy($sortBy, $sortDir)->paginate(10);
+
+return view('index', [
+    'items' => $items,
+    'listSorter' => $listSorter,
+]);
+```
+
+In the view and the table header:
+```
+<thead>
+    <tr>
+        @foreach($listSorter->getSortableItems() as $sortableItem)
+            <th>
+                <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getAlias(), $listSorter->getSortDirKey() => $listSorter->getNewSortDir(), 'page' => $jobs->currentPage()]) }}">
+                    {{ $sortableItem->getTitle() }}
+                </a>
+            </th>
+        @endforeach
+    </tr>
+</thead>
 ```
