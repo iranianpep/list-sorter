@@ -23,7 +23,7 @@ class ListSorter
     }
 
     /**
-     * @return mixed
+     * @return Request
      */
     public function getRequest()
     {
@@ -31,7 +31,7 @@ class ListSorter
     }
 
     /**
-     * @param mixed $request
+     * @param Request $request
      */
     public function setRequest($request)
     {
@@ -135,7 +135,7 @@ class ListSorter
 
     public function getNewSortDir()
     {
-        return $this->getSortDir() === 'asc' ? 'decs' : 'asc';
+        return $this->getSortDir() === 'asc' ? 'desc' : 'asc';
     }
 
     public function getSortBy()
