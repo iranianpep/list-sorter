@@ -207,12 +207,30 @@ class ListSorter
     }
 
     /**
+     * Check to see whether the requested sortBy is a sortable item
+     *
+     * @param $sortBy
+     *
+     * @return bool
+     */
+    public function isSortable($sortBy)
+    {
+        foreach ($this->getSortableItems() as $sortableItem) {
+            if ($sortableItem->getAlias() === $sortBy) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getSortBy()
     {
         $sortBy = $this->getRequest()->input($this->getSortByKey());
 
-        return in_array($sortBy, array_keys($this->getSortableItems())) ? $sortBy : $this->getDefaultSortBy();
+        return $this->isSortable($sortBy) === true ? $sortBy : $this->getDefaultSortBy();
     }
 }

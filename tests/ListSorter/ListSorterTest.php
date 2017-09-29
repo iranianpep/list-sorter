@@ -140,4 +140,13 @@ class ListSorterTest extends TestCase
         $request->merge(['dir' => 'asc']);
         $this->assertEquals('desc', $listener->getNewSortDir());
     }
+
+    public function testIsSortable()
+    {
+        $request = new Request();
+        $listSorter = $this->getListSorter($request);
+
+        $this->assertTrue($listSorter->isSortable('created_at'));
+        $this->assertFalse($listSorter->isSortable('title'));
+    }
 }
