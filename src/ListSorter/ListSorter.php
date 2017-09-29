@@ -60,8 +60,9 @@ class ListSorter
     /**
      * @param array $sortableItems
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     private function validateSortableItems(array $sortableItems)
     {
