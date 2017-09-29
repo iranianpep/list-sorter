@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 
 class ListSorter
 {
+    const DEFAULT_SORT_BY_KEY = 'by';
+    const DEFAULT_SORT_DIR_KEY = 'dir';
+
     private $request;
     private $listSortableItems;
-    private $sortByKey = 'by';
-    private $sortDirKey = 'dir';
+    private $sortByKey;
+    private $sortDirKey;
     private $defaultSortBy;
     private $defaultSortDir;
 
@@ -56,6 +59,10 @@ class ListSorter
      */
     public function getSortByKey()
     {
+        if (!isset($this->sortByKey)) {
+            return self::DEFAULT_SORT_BY_KEY;
+        }
+
         return $this->sortByKey;
     }
 
@@ -72,6 +79,10 @@ class ListSorter
      */
     public function getSortDirKey()
     {
+        if (!isset($this->sortDirKey)) {
+            return self::DEFAULT_SORT_DIR_KEY;
+        }
+
         return $this->sortDirKey;
     }
 

@@ -41,4 +41,18 @@ class SortableItemTest extends TestCase
 
         $this->assertEquals(self::DUMMY_MODEL, $sortableItem->getColumn());
     }
+
+    public function testGetColumnNotSet()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
+
+        $this->assertEquals(self::DUMMY_ALIAS, $sortableItem->getColumn());
+    }
+
+    public function testGetTitleNotSet()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
+
+        $this->assertEquals(self::DUMMY_ALIAS, $sortableItem->getTitle());
+    }
 }
