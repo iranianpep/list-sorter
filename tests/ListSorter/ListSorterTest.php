@@ -46,12 +46,20 @@ class ListSorterTest extends TestCase
         new ListSorter(new Request(), $this->getDuplicatedSortableItems());
     }
 
-    public function testConstructWithEmptyItemes()
+    public function testConstructWithEmptyItems()
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Sortable items must not be empty');
 
         new ListSorter(new Request(), []);
+    }
+
+    public function testConstructWithInvalidItems()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Invalid sortable item');
+
+        new ListSorter(new Request(), ['nonObjectElement']);
     }
 
     public function testGetSortByKey()

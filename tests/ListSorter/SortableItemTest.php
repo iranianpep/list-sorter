@@ -13,6 +13,14 @@ class SortableItemTest extends TestCase
     const DUMMY_TITLE = 'Created';
     const DUMMY_COLUMN = 'created_at';
 
+    public function testConstruct()
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Sortable item alias cannot be empty');
+
+        new SortableItem('');
+    }
+
     public function testGetAlias()
     {
         $sortableItem = new SortableItem(self::DUMMY_ALIAS);
