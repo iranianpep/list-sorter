@@ -16,6 +16,11 @@ List Sorting Handler in Laravel
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/iranianpep/list-sorter/master/LICENSE)
 
 ## Usage
+Add the sorter to your composer:
+```
+composer require list-sorter/list-sorter
+```
+
 In the controller:
 ```
 $listSorter = new ListSorter($request, [
@@ -46,7 +51,7 @@ In the view and the table header:
     <tr>
         @foreach($listSorter->getSortableItems() as $sortableItem)
             <th>
-                <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getAlias(), $listSorter->getSortDirKey() => $listSorter->getNewSortDir(), 'page' => $jobs->currentPage()]) }}">
+                <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getAlias(), $listSorter->getSortDirKey() => $listSorter->getNewSortDir(), 'page' => $items->currentPage()]) }}">
                     {{ $sortableItem->getTitle() }}
                 </a>
             </th>
