@@ -215,9 +215,19 @@ class ListSorter
      */
     public function isSortable($sortBy)
     {
+        return empty($this->findSortableItem($sortBy)) ? false : true;
+    }
+
+    /**
+     * @param $alias
+     *
+     * @return bool|SortableItem
+     */
+    private function findSortableItem($alias)
+    {
         foreach ($this->getSortableItems() as $sortableItem) {
-            if ($sortableItem->getAlias() === $sortBy) {
-                return true;
+            if ($sortableItem->getAlias() === $alias) {
+                return $sortableItem;
             }
         }
 
@@ -225,12 +235,25 @@ class ListSorter
     }
 
     /**
-     * @return string
+     * Return the sort by value
+     * If the item is not sortable return the default,
+     * Otherwise return the column or the alias
+     *
+     * @return array|string
      */
     public function getSortBy()
     {
-        $sortBy = $this->getRequest()->input($this->getSortByKey());
+        $alias = $this->getRequest()->input($this->getSortByKey());
+        $sortableItem = $this->findSortableItem($alias);
 
-        return $this->isSortable($sortBy) === true ? $sortBy : $this->getDefaultSortBy();
+        if (empty($sortableItem)) {
+            return $this->getDefaultSortBy();
+        }
+
+        if (!empty($sortableItem->getColumn())) {
+            return $sortableItem->getColumn();
+        }
+
+        return $alias;
     }
 }

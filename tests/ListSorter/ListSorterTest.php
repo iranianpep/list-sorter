@@ -23,6 +23,15 @@ class ListSorterTest extends TestCase
         ];
     }
 
+    private function getSortableItemsWithColumn()
+    {
+        return  [
+            new SortableItem('applicant', 'applicant.name', 'Applicant'),
+            new SortableItem('title', 'jobs.title', 'Job'),
+            new SortableItem('created_at', 'applications.created_at', 'Created At'),
+        ];
+    }
+
     private function getListSorter($request)
     {
         return new ListSorter($request, $this->getSortableItems());
@@ -114,6 +123,17 @@ class ListSorterTest extends TestCase
 
         $request->merge(['by' => 'created_at']);
         $this->assertEquals('created_at', $this->getListSorter($request)->getSortBy());
+    }
+
+    public function testGetSortByColumn()
+    {
+        $request = new Request();
+        $listSorter = new ListSorter($request, $this->getSortableItemsWithColumn());
+
+        $this->assertEquals(null, $listSorter->getSortBy());
+
+        $request->merge(['by' => 'applicant']);
+        $this->assertEquals('applicant.name', $listSorter->getSortBy());
     }
 
     public function testGetSortDir()
