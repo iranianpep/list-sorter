@@ -238,10 +238,6 @@ class ListSorter
             return $this->getDefaultSortBy();
         }
 
-        if (!empty($sortableItem->getColumn())) {
-            return $sortableItem->getColumn();
-        }
-
-        return $alias;
+        return $sortableItem->getColumn();
     }
 }

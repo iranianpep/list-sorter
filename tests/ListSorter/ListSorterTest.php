@@ -134,9 +134,6 @@ class ListSorterTest extends TestCase
 
         $request->merge(['by' => 'applicant']);
         $this->assertEquals('applicant.name', $listSorter->getSortBy());
-
-        $request->merge(['by' => 'title']);
-        $this->assertEquals('title', $listSorter->getSortBy());
     }
 
     public function testGetSortDir()
