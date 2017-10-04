@@ -207,18 +207,6 @@ class ListSorter
     }
 
     /**
-     * Check to see whether the requested sortBy is a sortable item.
-     *
-     * @param $sortBy
-     *
-     * @return bool
-     */
-    public function isSortable($sortBy)
-    {
-        return empty($this->findSortableItem($sortBy)) ? false : true;
-    }
-
-    /**
      * @param $alias
      *
      * @return bool|SortableItem
