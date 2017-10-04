@@ -27,7 +27,7 @@ class ListSorterTest extends TestCase
     {
         return  [
             new SortableItem('applicant', 'applicant.name', 'Applicant'),
-            new SortableItem('title', 'jobs.title', 'Job'),
+            new SortableItem('title', '', 'Job'),
             new SortableItem('created_at', 'applications.created_at', 'Created At'),
         ];
     }
@@ -134,6 +134,9 @@ class ListSorterTest extends TestCase
 
         $request->merge(['by' => 'applicant']);
         $this->assertEquals('applicant.name', $listSorter->getSortBy());
+
+        $request->merge(['by' => 'title']);
+        $this->assertEquals('title', $listSorter->getSortBy());
     }
 
     public function testGetSortDir()
