@@ -225,7 +225,7 @@ class ListSorter
     /**
      * Return the sort by value
      * If the item is not sortable return the default,
-     * Otherwise return the column or the alias
+     * Otherwise return the column or the alias.
      *
      * @return array|string
      */
