@@ -10,25 +10,25 @@ class ListSorterTest extends TestCase
     private function getSortableItems()
     {
         return  [
-            'created_at' => new SortableItem(),
+            new SortableItem('created_at'),
         ];
     }
 
     private function getDuplicatedSortableItems()
     {
         return  [
-            'title'      => new SortableItem('title'),
-            'title'      => new SortableItem('title'),
-            'created_at' => new SortableItem('created_at'),
+            new SortableItem('title'),
+            new SortableItem('title'),
+            new SortableItem('created_at'),
         ];
     }
 
     private function getSortableItemsWithColumn()
     {
         return  [
-            'applicant'  => new SortableItem('name', 'applicant', 'Applicant'),
-            'title'      => new SortableItem('title', '', 'Job'),
-            'created_at' => new SortableItem('created_at', 'applications', 'Created At'),
+            new SortableItem('applicant', 'name', 'applicant'),
+            new SortableItem('title', 'title', '', 'Job'),
+            new SortableItem('created_at', 'created_at', 'applications', 'Created At'),
         ];
     }
 

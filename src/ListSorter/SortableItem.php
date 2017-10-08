@@ -11,11 +11,11 @@ class SortableItem
     private $isSelected;
     private $sortDir;
 
-    public function __construct($column = '', $tableAlias = '', $title = '')
+    public function __construct($key, $column = '', $tableAlias = '')
     {
+        $this->setKey($key);
         $this->setTableAlias($tableAlias);
         $this->setColumn($column);
-        $this->setTitle($title);
     }
 
     /**
@@ -31,6 +31,10 @@ class SortableItem
      */
     public function setKey($key)
     {
+        if (empty($key)) {
+            throw new \Exception('Sortable item key can not be empty');
+        }
+
         $this->key = $key;
     }
 
@@ -138,7 +142,7 @@ class SortableItem
     {
         $table = $this->getTableAlias();
 
-        if (empty($this)) {
+        if (empty($table)) {
             return $this->getColumn();
         }
 

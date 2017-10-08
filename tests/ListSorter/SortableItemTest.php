@@ -6,16 +6,16 @@ use PHPUnit\Framework\TestCase;
 
 class SortableItemTest extends TestCase
 {
-    const DUMMY_ALIAS = 'created';
-    const DUMMY_ALIAS_2 = 'Modified At';
-    const DUMMY_ALIAS_3 = 'modified_at';
-    const DUMMY_MODEL = 'user';
+    const DUMMY_KEY = 'created';
+    const DUMMY_KEY_2 = 'Modified At';
+    const DUMMY_KEY_3 = 'modified_at';
+    const DUMMY_TABLE_ALIAS = 'users';
     const DUMMY_TITLE = 'Created';
     const DUMMY_COLUMN = 'created_at';
 
     public function testGetTitle()
     {
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
         $sortableItem->setTitle(self::DUMMY_TITLE);
 
         $this->assertEquals(self::DUMMY_TITLE, $sortableItem->getTitle());
@@ -23,35 +23,86 @@ class SortableItemTest extends TestCase
 
     public function testGetColumn()
     {
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
-        $sortableItem->setColumn(self::DUMMY_MODEL);
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $sortableItem->setColumn(self::DUMMY_COLUMN);
 
-        $this->assertEquals(self::DUMMY_MODEL, $sortableItem->getColumn());
+        $this->assertEquals(self::DUMMY_COLUMN, $sortableItem->getColumn());
     }
 
     public function testGetColumnNotSet()
     {
-        $sortableItem = new SortableItem();
-        $sortableItem->setKey(self::DUMMY_ALIAS);
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
 
-        $this->assertEquals(self::DUMMY_ALIAS, $sortableItem->getColumn());
+        $this->assertEquals(self::DUMMY_KEY, $sortableItem->getColumn());
 
-        $sortableItem = new SortableItem();
-        $sortableItem->setKey(self::DUMMY_ALIAS_2);
+        $sortableItem = new SortableItem(self::DUMMY_KEY_2);
 
         $this->assertEquals('modified_at', $sortableItem->getColumn());
     }
 
     public function testGetTitleNotSet()
     {
-        $sortableItem = new SortableItem();
-        $sortableItem->setKey(self::DUMMY_ALIAS);
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
 
-        $this->assertEquals(ucwords(self::DUMMY_ALIAS), $sortableItem->getTitle());
+        $this->assertEquals(ucwords(self::DUMMY_KEY), $sortableItem->getTitle());
 
-        $sortableItem = new SortableItem();
-        $sortableItem->setKey(self::DUMMY_ALIAS_3);
+        $sortableItem = new SortableItem(self::DUMMY_KEY_3);
 
         $this->assertEquals('Modified At', $sortableItem->getTitle());
+    }
+
+    public function testGetTableAlias()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $sortableItem->setTableAlias('users');
+
+        $this->assertEquals('users', $sortableItem->getTableAlias());
+    }
+
+    public function testIsSelected()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+
+        $this->assertEquals(false, $sortableItem->isSelected());
+
+        $sortableItem->setIsSelected(true);
+
+        $this->assertEquals(true, $sortableItem->isSelected());
+    }
+
+    public function testGetSortDir()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $this->assertEquals(null, $sortableItem->getSortDir());
+
+        $sortableItem->setSortDir('dummy');
+        $this->assertEquals(null, $sortableItem->getSortDir());
+
+        $sortableItem->setSortDir('asc');
+        $this->assertEquals('asc', $sortableItem->getSortDir());
+
+        $sortableItem->setSortDir('desc');
+        $this->assertEquals('desc', $sortableItem->getSortDir());
+    }
+
+    public function testGetNewSortDir()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $this->assertEquals('asc', $sortableItem->getNewSortDir());
+
+        $sortableItem->setSortDir('asc');
+        $this->assertEquals('desc', $sortableItem->getNewSortDir());
+
+        $sortableItem->setSortDir('desc');
+        $this->assertEquals('asc', $sortableItem->getNewSortDir());
+    }
+
+    public function testGetSortBy()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $this->assertEquals(self::DUMMY_KEY, $sortableItem->getSortBy());
+
+        $sortableItem->setTableAlias(self::DUMMY_TABLE_ALIAS);
+        $this->assertEquals(self::DUMMY_TABLE_ALIAS.'.'.self::DUMMY_KEY, $sortableItem->getSortBy());
     }
 }

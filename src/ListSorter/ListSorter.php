@@ -60,18 +60,11 @@ class ListSorter
 
         foreach ($sortableItems as $key => $sortableItem) {
             if (!$sortableItem instanceof SortableItem) {
-                $tempSortableItem = new SortableItem();
-                $tempSortableItem->setKey($sortableItem);
-                $sortableItems[$sortableItem] = $tempSortableItem;
+                $tempSortableItem = new SortableItem($sortableItem);
+                $sortableItems[] = $tempSortableItem;
                 unset($sortableItems[$key]);
                 continue;
             }
-
-            if (!empty($sortableItem->getKey()) && $sortableItem->getKey() !== $key) {
-                throw new \Exception('Sortable item key mismatch: '.$key.' !== '.$sortableItem->getKey());
-            }
-
-            $sortableItem->setKey($key);
         }
 
         $this->sortableItems = $sortableItems;
