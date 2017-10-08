@@ -94,6 +94,31 @@ class ListSorterTest extends TestCase
         $this->assertEquals($sortableItems[0], $listSorter->getSelectedSortableItem());
     }
 
+    public function testGetSortBy()
+    {
+        $request = new Request();
+
+        $sortableItems = $this->getSortableItemsWithColumn();
+        $listSorter = new ListSorter($request, $sortableItems);
+
+        $request->merge([$listSorter->getSortByKey() => 'applicant']);
+        $this->assertEquals('applicant.name', $listSorter->getSortBy());
+    }
+
+    public function testGetSortDir()
+    {
+        $request = new Request();
+
+        $sortableItems = $this->getSortableItemsWithColumn();
+        $listSorter = new ListSorter($request, $sortableItems);
+
+        $request->merge([$listSorter->getSortByKey() => 'applicant']);
+        $this->assertEquals(null, $listSorter->getSortDir());
+
+        $listSorter->setDefaultSortDir('desc');
+        $this->assertEquals('desc', $listSorter->getSortDir());
+    }
+
     public function testGetDefaultSortBy()
     {
         $request = new Request();
