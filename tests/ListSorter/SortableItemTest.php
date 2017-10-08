@@ -17,7 +17,6 @@ class SortableItemTest extends TestCase
     {
         $sortableItem = new SortableItem(self::DUMMY_KEY);
         $sortableItem->setTitle(self::DUMMY_TITLE);
-
         $this->assertEquals(self::DUMMY_TITLE, $sortableItem->getTitle());
     }
 
@@ -25,7 +24,6 @@ class SortableItemTest extends TestCase
     {
         $sortableItem = new SortableItem(self::DUMMY_KEY);
         $sortableItem->setColumn(self::DUMMY_COLUMN);
-
         $this->assertEquals(self::DUMMY_COLUMN, $sortableItem->getColumn());
     }
 
@@ -54,9 +52,9 @@ class SortableItemTest extends TestCase
     public function testGetTableAlias()
     {
         $sortableItem = new SortableItem(self::DUMMY_KEY);
-        $sortableItem->setTableAlias('users');
+        $sortableItem->setTableAlias(self::DUMMY_TABLE_ALIAS);
 
-        $this->assertEquals('users', $sortableItem->getTableAlias());
+        $this->assertEquals(self::DUMMY_TABLE_ALIAS, $sortableItem->getTableAlias());
     }
 
     public function testIsSelected()
@@ -104,5 +102,13 @@ class SortableItemTest extends TestCase
 
         $sortableItem->setTableAlias(self::DUMMY_TABLE_ALIAS);
         $this->assertEquals(self::DUMMY_TABLE_ALIAS.'.'.self::DUMMY_KEY, $sortableItem->getSortBy());
+    }
+
+    public function testInvalidKey()
+    {
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage("Sortable item key can not be empty");
+
+        new SortableItem('');
     }
 }
