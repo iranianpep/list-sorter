@@ -30,6 +30,8 @@ class SortableItem
 
     /**
      * @param $key
+     *
+     * @throws \Exception
      */
     public function setKey($key)
     {
@@ -140,6 +142,9 @@ class SortableItem
         return $this->getSortDir() === 'asc' ? 'desc' : 'asc';
     }
 
+    /**
+     * @return string
+     */
     public function getSortBy()
     {
         $table = $this->getTableAlias();

@@ -6,47 +6,15 @@ namespace ListSorter;
 
 use Illuminate\Http\Request;
 
-class ListSorter
+class ListSorter extends AbstractListSorter
 {
     const DEFAULT_SORT_BY_KEY = 'by';
     const DEFAULT_SORT_DIR_KEY = 'dir';
 
-    private $request;
-    private $sortableItems;
     private $sortByKey;
     private $sortDirKey;
     private $defaultSortBy;
     private $defaultSortDir;
-
-    public function __construct(Request $request, array $sortableItems)
-    {
-        $this->setRequest($request);
-        $this->setSortableItems($sortableItems);
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSortableItems()
-    {
-        return $this->sortableItems;
-    }
 
     /**
      * @param array $sortableItems
@@ -67,6 +35,12 @@ class ListSorter
         $this->sortableItems = $sortableItems;
     }
 
+    /**
+     * @param array $sortableItems
+     *
+     * @return bool
+     * @throws \Exception
+     */
     private function validateSortableItems(array $sortableItems)
     {
         if (empty($sortableItems)) {
@@ -80,6 +54,11 @@ class ListSorter
         return true;
     }
 
+    /**
+     * @param array $sortableItems
+     *
+     * @return array
+     */
     private function extractKeys(array $sortableItems)
     {
         $keys = [];
@@ -95,6 +74,11 @@ class ListSorter
         return $keys;
     }
 
+    /**
+     * @param array $aliases
+     *
+     * @return bool
+     */
     private function areKeysUnique(array $aliases)
     {
         if (count($aliases) === count(array_unique($aliases))) {
@@ -159,6 +143,9 @@ class ListSorter
         return false;
     }
 
+    /**
+     * @return bool|SortableItem|void
+     */
     public function getSelectedSortableItem()
     {
         $key = $this->getRequest()->input($this->getSortByKey());
@@ -187,6 +174,11 @@ class ListSorter
         return $this->defaultSortBy;
     }
 
+    /**
+     * @param $key
+     *
+     * @throws \Exception
+     */
     public function setDefaultSortBy($key)
     {
         if (!$this->findSortableItem($key) instanceof SortableItem) {
@@ -196,16 +188,25 @@ class ListSorter
         $this->defaultSortBy = $key;
     }
 
+    /**
+     * @param $dir
+     */
     public function setDefaultSortDir($dir)
     {
         $this->defaultSortDir = $dir;
     }
 
+    /**
+     * @return string
+     */
     public function getDefaultSortDir()
     {
         return $this->defaultSortDir;
     }
 
+    /**
+     * @return string|void
+     */
     public function getSortBy()
     {
         $selectedSortableItem = $this->getSelectedSortableItem();
@@ -216,6 +217,9 @@ class ListSorter
         return $selectedSortableItem->getSortBy();
     }
 
+    /**
+     * @return string|void
+     */
     public function getSortDir()
     {
         $selectedSortableItem = $this->getSelectedSortableItem();
