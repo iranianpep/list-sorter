@@ -93,4 +93,29 @@ class ListSorterTest extends TestCase
         $request->merge([$listSorter->getSortByKey() => 'applicant']);
         $this->assertEquals($sortableItems[0], $listSorter->getSelectedSortableItem());
     }
+
+    public function testGetDefaultSortBy()
+    {
+        $request = new Request();
+        $listSorter = $this->getListSorter($request);
+
+        $listSorter->setDefaultSortBy('created_at');
+        $this->assertEquals('created_at', $listSorter->getDefaultSortBy());
+
+        $this->expectException('\Exception');
+        $this->expectExceptionMessage('Invalid sortable item key : invalid');
+
+        $listSorter->setDefaultSortBy('invalid');
+    }
+
+    public function testGetDefaultSortDir()
+    {
+        $request = new Request();
+        $listSorter = $this->getListSorter($request);
+
+        $this->assertEquals(null, $listSorter->getDefaultSortDir());
+
+        $listSorter->setDefaultSortDir('asc');
+        $this->assertEquals('asc', $listSorter->getDefaultSortDir());
+    }
 }
