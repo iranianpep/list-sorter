@@ -56,9 +56,7 @@ class ListSorter
     public function setSortableItems(array $sortableItems)
     {
         // validate aliases
-        if (empty($sortableItems)) {
-            throw new \Exception('Sortable items can not be empty');
-        }
+        $this->validateSortableItems($sortableItems);
 
         foreach ($sortableItems as $key => $sortableItem) {
             if (!$sortableItem instanceof SortableItem) {
@@ -70,6 +68,42 @@ class ListSorter
         }
 
         $this->sortableItems = $sortableItems;
+    }
+
+    private function validateSortableItems(array $sortableItems)
+    {
+        if (empty($sortableItems)) {
+            throw new \Exception('Sortable items can not be empty');
+        }
+
+        if ($this->areKeysUnique($this->extractKeys($sortableItems)) !== true) {
+            throw new \Exception('Sortable item alias must be unique');
+        }
+
+        return true;
+    }
+
+    private function extractKeys(array $sortableItems)
+    {
+        $keys = [];
+        foreach ($sortableItems as $sortableItem) {
+            if (!$sortableItem instanceof SortableItem) {
+                $keys[] = $sortableItem;
+                continue;
+            }
+
+            $keys[] = $sortableItem->getKey();
+        }
+
+        return $keys;
+    }
+
+    private function areKeysUnique(array $aliases)
+    {
+        if (count($aliases) === count(array_unique($aliases))) {
+            return true;
+        }
+        return false;
     }
 
     /**
