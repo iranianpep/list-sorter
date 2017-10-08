@@ -100,6 +100,7 @@ class ListSorter
         if (count($aliases) === count(array_unique($aliases))) {
             return true;
         }
+
         return false;
     }
 
