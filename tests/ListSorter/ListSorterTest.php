@@ -76,7 +76,7 @@ class ListSorterTest extends TestCase
 
         $sortableItemsObjects = [
             new SortableItem('title'),
-            new SortableItem('created_at')
+            new SortableItem('created_at'),
         ];
 
         $listSorter = new ListSorter(new Request(), $sortableItems);
