@@ -37,6 +37,25 @@ class ListSorterTest extends TestCase
         return new ListSorter($request, $this->getSortableItems());
     }
 
+    private function getListSorterWithColumn($request)
+    {
+        return new ListSorter($request, $this->getSortableItemsWithColumn());
+    }
+
+    public function testGetRequest()
+    {
+        $request = new Request();
+        $listSorter = $this->getListSorter($request);
+        $this->assertEquals($request, $listSorter->getRequest());
+    }
+
+    public function testGetSortableItems()
+    {
+        $request = new Request();
+        $listSorter = $this->getListSorter($request);
+        $this->assertEquals($this->getSortableItems(), $listSorter->getSortableItems());
+    }
+
     public function testGetSortByKey()
     {
         $request = new Request();
@@ -61,5 +80,16 @@ class ListSorterTest extends TestCase
         $listSorter->setSortDirKey('sortDir');
 
         $this->assertEquals('sortDir', $listSorter->getSortDirKey());
+    }
+
+    public function testGetSelectedSortableItem()
+    {
+        $request = new Request();
+
+        $sortableItems = $this->getSortableItemsWithColumn();
+        $listSorter = new ListSorter($request, $sortableItems);
+
+        $request->merge([$listSorter->getSortByKey() => 'applicant']);
+        $this->assertEquals($sortableItems[0], $listSorter->getSelectedSortableItem());
     }
 }
