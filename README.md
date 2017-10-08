@@ -45,14 +45,37 @@ return view('index', [
 ]);
 ```
 
+Or the shorter version (column and title are determined based on the key):
+```
+$listSorter = new ListSorter(
+    $request,
+    [
+        'title',
+        'created_at',
+    ]
+);
+
+$listSorter->setDefaultSortBy('created_at');
+$listSorter->setDefaultSortDir('desc');
+```
+
 In the view and the table header:
 ```
 <thead>
     <tr>
         @foreach($listSorter->getSortableItems() as $sortableItem)
             <th>
-                <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getAlias(), $listSorter->getSortDirKey() => $listSorter->getNewSortDir(), 'page' => $items->currentPage()]) }}">
+                <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getKey(), $listSorter->getSortDirKey() => $sortableItem->getNewSortDir(), 'page' => $currentPage]) }}">
                     {{ $sortableItem->getTitle() }}
+                    @if ($sortableItem->isSelected() === true)
+                        @if (in_array($sortableItem->getSortDir(), ['asc', 'desc']))
+                            <i class="fa fa-sort-{{ $sortableItem->getSortDir() }}" aria-hidden="true"></i>
+                        @else
+                            <i class="fa fa-sort-{{ $listSorter->getSortDir() }}" aria-hidden="true"></i>
+                        @endif
+                    @else
+                        <i class="fa fa-sort" aria-hidden="true"></i>
+                    @endif
                 </a>
             </th>
         @endforeach
