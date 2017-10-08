@@ -37,40 +37,6 @@ class ListSorterTest extends TestCase
         return new ListSorter($request, $this->getSortableItems());
     }
 
-    public function testConstruct()
-    {
-        $request = new Request();
-
-        $listSorter = $this->getListSorter($request);
-
-        $this->assertEquals($request, $listSorter->getRequest());
-        $this->assertEquals($this->getSortableItems(), $listSorter->getSortableItems());
-    }
-
-    public function testConstructWithException()
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Sortable item alias must be unique');
-
-        new ListSorter(new Request(), $this->getDuplicatedSortableItems());
-    }
-
-    public function testConstructWithEmptyItems()
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Sortable items must not be empty');
-
-        new ListSorter(new Request(), []);
-    }
-
-    public function testConstructWithInvalidItems()
-    {
-        $this->expectException('Exception');
-        $this->expectExceptionMessage('Invalid sortable item');
-
-        new ListSorter(new Request(), ['nonObjectElement']);
-    }
-
     public function testGetSortByKey()
     {
         $request = new Request();

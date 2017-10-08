@@ -31,22 +31,26 @@ class SortableItemTest extends TestCase
 
     public function testGetColumnNotSet()
     {
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
+        $sortableItem = new SortableItem();
+        $sortableItem->setKey(self::DUMMY_ALIAS);
 
         $this->assertEquals(self::DUMMY_ALIAS, $sortableItem->getColumn());
 
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS_2);
+        $sortableItem = new SortableItem();
+        $sortableItem->setKey(self::DUMMY_ALIAS_2);
 
         $this->assertEquals('modified_at', $sortableItem->getColumn());
     }
 
     public function testGetTitleNotSet()
     {
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS);
+        $sortableItem = new SortableItem();
+        $sortableItem->setKey(self::DUMMY_ALIAS);
 
         $this->assertEquals(ucwords(self::DUMMY_ALIAS), $sortableItem->getTitle());
 
-        $sortableItem = new SortableItem(self::DUMMY_ALIAS_3);
+        $sortableItem = new SortableItem();
+        $sortableItem->setKey(self::DUMMY_ALIAS_3);
 
         $this->assertEquals('Modified At', $sortableItem->getTitle());
     }
