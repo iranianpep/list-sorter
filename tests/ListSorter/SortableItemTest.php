@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ListSorter;
@@ -108,7 +109,7 @@ class SortableItemTest extends TestCase
     public function testInvalidKey()
     {
         $this->expectException('\Exception');
-        $this->expectExceptionMessage("Sortable item key can not be empty");
+        $this->expectExceptionMessage('Sortable item key can not be empty');
 
         new SortableItem('');
     }
