@@ -60,10 +60,7 @@ class ListSorter
 
         foreach ($sortableItems as $key => $sortableItem) {
             if (!$sortableItem instanceof SortableItem) {
-                $tempSortableItem = new SortableItem($sortableItem);
-                $sortableItems[] = $tempSortableItem;
-                unset($sortableItems[$key]);
-                continue;
+                $sortableItems[$key] = new SortableItem($sortableItem);
             }
         }
 

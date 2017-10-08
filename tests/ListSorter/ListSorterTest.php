@@ -53,6 +53,36 @@ class ListSorterTest extends TestCase
         new ListSorter(new Request(), $this->getDuplicatedSortableItems());
     }
 
+    public function testConstructWithException2()
+    {
+        $sortableItems = [
+            'title',
+            'title',
+            'created_at',
+        ];
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Sortable item alias must be unique');
+
+        new ListSorter(new Request(), $sortableItems);
+    }
+
+    public function testConstructWithNonObjects()
+    {
+        $sortableItems = [
+            'title',
+            'created_at',
+        ];
+
+        $sortableItemsObjects = [
+            new SortableItem('title'),
+            new SortableItem('created_at')
+        ];
+
+        $listSorter = new ListSorter(new Request(), $sortableItems);
+        $this->assertEquals($sortableItemsObjects, $listSorter->getSortableItems());
+    }
+
     public function testGetRequest()
     {
         $request = new Request();
@@ -118,6 +148,17 @@ class ListSorterTest extends TestCase
 
         $request->merge([$listSorter->getSortByKey() => 'applicant']);
         $this->assertEquals('applicant.name', $listSorter->getSortBy());
+    }
+
+    public function testGetSortByEmpty()
+    {
+        $request = new Request();
+
+        $sortableItems = $this->getSortableItemsWithColumn();
+        $listSorter = new ListSorter($request, $sortableItems);
+
+        $request->merge([$listSorter->getSortByKey() => 'dummy']);
+        $this->assertEquals(null, $listSorter->getSortBy());
     }
 
     public function testGetSortDir()
