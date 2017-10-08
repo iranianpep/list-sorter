@@ -73,8 +73,9 @@ abstract class AbstractListSorter
     /**
      * @param array $sortableItems
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     private function validateSortableItems(array $sortableItems)
     {
@@ -119,6 +120,7 @@ abstract class AbstractListSorter
         if (count($aliases) === count(array_unique($aliases))) {
             return true;
         }
+
         return false;
     }
 }
