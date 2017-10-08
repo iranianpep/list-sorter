@@ -48,72 +48,33 @@ class ListSorter
 
     /**
      * @param array $sortableItems
+     *
+     * @throws \Exception
      */
     public function setSortableItems(array $sortableItems)
     {
         // validate aliases
-        if ($this->validateSortableItems($sortableItems) === true) {
-            $this->sortableItems = $sortableItems;
-        }
-    }
-
-    /**
-     * @param array $sortableItems
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     */
-    private function validateSortableItems(array $sortableItems)
-    {
         if (empty($sortableItems)) {
-            throw new \Exception('Sortable items must not be empty');
+            throw new \Exception('Sortable items can not be empty');
         }
 
-        if ($this->areAliasesUnique($this->extractAliases($sortableItems)) !== true) {
-            throw new \Exception('Sortable item alias must be unique');
-        }
-
-        return true;
-    }
-
-    /**
-     * Extract aliases out of sortable items.
-     *
-     * @param array $sortableItems
-     *
-     * @throws \Exception
-     *
-     * @return array
-     */
-    private function extractAliases(array $sortableItems)
-    {
-        $aliases = [];
-        foreach ($sortableItems as $sortableItem) {
+        foreach ($sortableItems as $key => $sortableItem) {
             if (!$sortableItem instanceof SortableItem) {
-                throw new \Exception('Invalid sortable item');
+                $tempSortableItem = new SortableItem();
+                $tempSortableItem->setKey($sortableItem);
+                $sortableItems[$sortableItem] = $tempSortableItem;
+                unset($sortableItems[$key]);
+                continue;
             }
 
-            $aliases[] = $sortableItem->getAlias();
+            if (!empty($sortableItem->getKey()) && $sortableItem->getKey() !== $key) {
+                throw new \Exception('Sortable item key mismatch: '.$key.' !== '.$sortableItem->getKey());
+            }
+
+            $sortableItem->setKey($key);
         }
 
-        return $aliases;
-    }
-
-    /**
-     * Check to see whether aliases are unique or not.
-     *
-     * @param array $aliases
-     *
-     * @return bool
-     */
-    private function areAliasesUnique(array $aliases)
-    {
-        if (count($aliases) === count(array_unique($aliases))) {
-            return true;
-        }
-
-        return false;
+        $this->sortableItems = $sortableItems;
     }
 
     /**
@@ -157,64 +118,14 @@ class ListSorter
     }
 
     /**
-     * @return string
-     */
-    public function getDefaultSortBy()
-    {
-        return $this->defaultSortBy;
-    }
-
-    /**
-     * @param string $defaultSortBy
-     */
-    public function setDefaultSortBy($defaultSortBy)
-    {
-        $this->defaultSortBy = $defaultSortBy;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultSortDir()
-    {
-        return $this->defaultSortDir;
-    }
-
-    /**
-     * @param string $defaultSortDir
-     */
-    public function setDefaultSortDir($defaultSortDir)
-    {
-        $this->defaultSortDir = $defaultSortDir;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSortDir()
-    {
-        $sortDir = $this->getRequest()->input($this->getSortDirKey());
-
-        return in_array($sortDir, ['asc', 'desc']) ? $sortDir : $this->getDefaultSortDir();
-    }
-
-    /**
-     * @return string
-     */
-    public function getNewSortDir()
-    {
-        return $this->getSortDir() === 'asc' ? 'desc' : 'asc';
-    }
-
-    /**
-     * @param $alias
+     * @param $key
      *
      * @return bool|SortableItem
      */
-    private function findSortableItem($alias)
+    private function findSortableItem($key)
     {
         foreach ($this->getSortableItems() as $sortableItem) {
-            if ($sortableItem->getAlias() === $alias) {
+            if ($sortableItem->getKey() === $key) {
                 return $sortableItem;
             }
         }
@@ -222,22 +133,76 @@ class ListSorter
         return false;
     }
 
-    /**
-     * Return the sort by value
-     * If the item is not sortable return the default,
-     * Otherwise return the column or the alias
-     *
-     * @return array|string
-     */
-    public function getSortBy()
+    public function getSelectedSortableItem()
     {
-        $alias = $this->getRequest()->input($this->getSortByKey());
-        $sortableItem = $this->findSortableItem($alias);
+        $key = $this->getRequest()->input($this->getSortByKey());
+        $sortableItem = $this->findSortableItem($key);
 
         if (empty($sortableItem)) {
-            return $this->getDefaultSortBy();
+            $sortableItem = $this->findSortableItem($this->getDefaultSortBy());
         }
 
-        return $sortableItem->getColumn();
+        if (!$sortableItem instanceof SortableItem) {
+            return;
+        }
+
+        $dir = $this->getRequest()->input($this->getSortDirKey());
+        $sortableItem->setSortDir($dir);
+        $sortableItem->setIsSelected(true);
+
+        return $sortableItem;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultSortBy()
+    {
+        return $this->defaultSortBy;
+    }
+
+    public function setDefaultSortBy($key)
+    {
+        if (!$this->findSortableItem($key) instanceof SortableItem) {
+            throw new \Exception('Invalid sortable item key : '.$key);
+        }
+
+        $this->defaultSortBy = $key;
+    }
+
+    public function setDefaultSortDir($dir)
+    {
+        $this->defaultSortDir = $dir;
+    }
+
+    public function getDefaultSortDir()
+    {
+        return $this->defaultSortDir;
+    }
+
+    public function getSortBy()
+    {
+        $selectedSortableItem = $this->getSelectedSortableItem();
+        if (!$selectedSortableItem instanceof SortableItem) {
+            return;
+        }
+
+        return $selectedSortableItem->getSortBy();
+    }
+
+    public function getSortDir()
+    {
+        $selectedSortableItem = $this->getSelectedSortableItem();
+        if (!$selectedSortableItem instanceof SortableItem) {
+            return;
+        }
+
+        $sortDir = $selectedSortableItem->getSortDir();
+
+        if (empty($sortDir)) {
+            return $this->getDefaultSortDir();
+        }
+
+        return $sortDir;
     }
 }

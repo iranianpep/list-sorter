@@ -10,25 +10,25 @@ class ListSorterTest extends TestCase
     private function getSortableItems()
     {
         return  [
-            new SortableItem('created_at'),
+            'created_at' => new SortableItem(),
         ];
     }
 
     private function getDuplicatedSortableItems()
     {
         return  [
-            new SortableItem('title'),
-            new SortableItem('title'),
-            new SortableItem('created_at'),
+            'title' => new SortableItem('title'),
+            'title' => new SortableItem('title'),
+            'created_at' => new SortableItem('created_at'),
         ];
     }
 
     private function getSortableItemsWithColumn()
     {
         return  [
-            new SortableItem('applicant', 'applicant.name', 'Applicant'),
-            new SortableItem('title', '', 'Job'),
-            new SortableItem('created_at', 'applications.created_at', 'Created At'),
+            'applicant' => new SortableItem('name', 'applicant', 'Applicant'),
+            'title' => new SortableItem('title', '', 'Job'),
+            'created_at' => new SortableItem('created_at', 'applications', 'Created At'),
         ];
     }
 
@@ -95,69 +95,5 @@ class ListSorterTest extends TestCase
         $listSorter->setSortDirKey('sortDir');
 
         $this->assertEquals('sortDir', $listSorter->getSortDirKey());
-    }
-
-    public function testGetDefaultSortBy()
-    {
-        $request = new Request();
-        $listSorter = $this->getListSorter($request);
-
-        $listSorter->setDefaultSortBy('created_at');
-        $this->assertEquals('created_at', $listSorter->getDefaultSortBy());
-    }
-
-    public function testGetDefaultSortDir()
-    {
-        $request = new Request();
-        $listSorter = $this->getListSorter($request);
-
-        $listSorter->setDefaultSortDir('asc');
-        $this->assertEquals('asc', $listSorter->getDefaultSortDir());
-    }
-
-    public function testGetSortBy()
-    {
-        $request = new Request();
-
-        $this->assertEquals(null, $this->getListSorter($request)->getSortBy());
-
-        $request->merge(['by' => 'created_at']);
-        $this->assertEquals('created_at', $this->getListSorter($request)->getSortBy());
-    }
-
-    public function testGetSortByColumn()
-    {
-        $request = new Request();
-        $listSorter = new ListSorter($request, $this->getSortableItemsWithColumn());
-
-        $this->assertEquals(null, $listSorter->getSortBy());
-
-        $request->merge(['by' => 'applicant']);
-        $this->assertEquals('applicant.name', $listSorter->getSortBy());
-    }
-
-    public function testGetSortDir()
-    {
-        $request = new Request();
-
-        $listener = $this->getListSorter($request);
-        $this->assertEquals(null, $listener->getSortDir());
-
-        $listener->setDefaultSortDir('desc');
-        $this->assertEquals('desc', $listener->getSortDir());
-
-        $request->merge(['dir' => 'asc']);
-        $this->assertEquals('asc', $listener->getSortDir());
-    }
-
-    public function testGetNewSortDir()
-    {
-        $request = new Request();
-
-        $listener = $this->getListSorter($request);
-        $this->assertEquals('asc', $listener->getNewSortDir());
-
-        $request->merge(['dir' => 'asc']);
-        $this->assertEquals('desc', $listener->getNewSortDir());
     }
 }

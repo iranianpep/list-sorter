@@ -4,14 +4,16 @@ namespace ListSorter;
 
 class SortableItem
 {
-    private $model;
-    private $alias;
+    private $key;
+    private $tableAlias;
     private $column;
     private $title;
+    private $isSelected;
+    private $sortDir;
 
-    public function __construct($alias, $column = '', $title = '')
+    public function __construct($column = '', $tableAlias = '', $title = '')
     {
-        $this->setAlias($alias);
+        $this->setTableAlias($tableAlias);
         $this->setColumn($column);
         $this->setTitle($title);
     }
@@ -19,39 +21,33 @@ class SortableItem
     /**
      * @return string
      */
-    public function getModel()
+    public function getKey()
     {
-        return $this->model;
+        return $this->key;
     }
 
     /**
-     * @param string $model
+     * @param $key
      */
-    public function setModel($model)
+    public function setKey($key)
     {
-        $this->model = $model;
+        $this->key = $key;
     }
 
     /**
      * @return string
      */
-    public function getAlias()
+    public function getTableAlias()
     {
-        return $this->alias;
+        return $this->tableAlias;
     }
 
     /**
-     * @param $alias
-     *
-     * @throws \Exception
+     * @param string $tableAlias
      */
-    public function setAlias($alias)
+    public function setTableAlias($tableAlias)
     {
-        if (empty($alias)) {
-            throw new \Exception('Sortable item alias cannot be empty');
-        }
-
-        $this->alias = $alias;
+        $this->tableAlias = $tableAlias;
     }
 
     /**
@@ -61,7 +57,7 @@ class SortableItem
     {
         if (empty($this->column)) {
             // fall back option: replace the spaces with under line
-            return strtolower(str_replace(' ', '_', $this->getAlias()));
+            return strtolower(str_replace(' ', '_', $this->getKey()));
         }
 
         return $this->column;
@@ -82,7 +78,7 @@ class SortableItem
     {
         if (empty($this->title)) {
             // fall back option: replace under line with space
-            return ucwords(str_replace('_', ' ', $this->getColumn()));
+            return ucwords(str_replace('_', ' ', $this->getKey()));
         }
 
         return $this->title;
@@ -94,5 +90,58 @@ class SortableItem
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSelected()
+    {
+        return empty($this->isSelected) ? false : true;
+    }
+
+    /**
+     * @param bool $isSelected
+     */
+    public function setIsSelected($isSelected)
+    {
+        $this->isSelected = $isSelected;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortDir()
+    {
+        return $this->sortDir;
+    }
+
+    /**
+     * @param string $sortDir
+     */
+    public function setSortDir($sortDir)
+    {
+        if (in_array($sortDir, ['asc', 'desc'])) {
+            $this->sortDir = $sortDir;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewSortDir()
+    {
+        return $this->getSortDir() === 'asc' ? 'desc' : 'asc';
+    }
+
+    public function getSortBy()
+    {
+        $table = $this->getTableAlias();
+
+        if (empty($this)) {
+            return $this->getColumn();
+        }
+
+        return $table.'.'.$this->getColumn();
     }
 }
