@@ -113,4 +113,13 @@ class SortableItemTest extends TestCase
 
         new SortableItem('');
     }
+
+    public function testIsHidden()
+    {
+        $sortableItem = new SortableItem(self::DUMMY_KEY);
+        $this->assertEquals(null, $sortableItem->isHidden());
+
+        $sortableItem->setIsHidden(true);
+        $this->assertEquals(true, $sortableItem->isHidden());
+    }
 }

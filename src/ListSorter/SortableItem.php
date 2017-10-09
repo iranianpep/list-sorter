@@ -12,6 +12,7 @@ class SortableItem
     private $title;
     private $isSelected;
     private $sortDir;
+    private $isHidden;
 
     public function __construct($key, $column = '', $tableAlias = '')
     {
@@ -154,5 +155,21 @@ class SortableItem
         }
 
         return $table.'.'.$this->getColumn();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return $this->isHidden;
+    }
+
+    /**
+     * @param bool $isHidden
+     */
+    public function setIsHidden($isHidden)
+    {
+        $this->isHidden = $isHidden;
     }
 }

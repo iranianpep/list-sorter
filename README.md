@@ -64,6 +64,9 @@ In the view and the table header:
 <thead>
     <tr>
         @foreach($listSorter->getSortableItems() as $sortableItem)
+            @if ($sortableItem->isHidden === true)
+                @continue
+            @endif
             <th>
                 <a href="{{ request()->fullUrlWithQuery([$listSorter->getSortByKey() => $sortableItem->getKey(), $listSorter->getSortDirKey() => $sortableItem->getNewSortDir(), 'page' => $currentPage]) }}">
                     {{ $sortableItem->getTitle() }}
